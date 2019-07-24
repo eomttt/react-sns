@@ -1,9 +1,9 @@
-import React from 'react'; // eslint 에서 react 쓰면 import 하라고 명시됨
-import Link from 'next/link';
+import React from 'react';
 import Head from 'next/head';
 import AppLayout from '../components/AppLayout';
 
-const Home = () => {
+
+const Profile = () => {
   return (
     <>
       <Head>
@@ -12,11 +12,11 @@ const Home = () => {
       </Head>
       <AppLayout>
         <div>
-          Hello, Next!
-        </div>
+          Profile!
+          </div>
       </AppLayout>
     </>
   );
 };
 
-export default Home;
+export default Profile;
