@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 
+import { useInput } from '../components/LoginForm';
+
 const Signup = () => {
   // const [id, setId] = useState(''); // Using custom hook in bottom
   // const [nick, setNick] = useState(''); // Using custom hook in bottom
@@ -49,15 +51,7 @@ const Signup = () => {
     setTerm(e.target.checked);
   };
 
-  // Custom hook
-  const useInput = (initValue = null) => {
-    const [value, setter] = useState(initValue);
-    const handler = useCallback((e) => {
-      setter(e.target.value);
-    }, []);
 
-    return [value, handler];
-  }
 
   const [id, onChangeId] = useInput('');
   const [nick, onChangedNick] = useInput('');
