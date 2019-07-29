@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import AppLayout from '../components/AppLayout';
+import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 
 const Signup = () => {
@@ -13,7 +11,7 @@ const Signup = () => {
   const [passError, setPassError] = useState(false);
   const [termError, setTermError] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = useCallback((e) => {
     e.preventDefault();
 
     if (pass !== passChk) {
@@ -27,7 +25,7 @@ const Signup = () => {
     console.log({
       id, nick, pass, passChk, term
     })
-  };
+  }, [pass, passChk, term]);
 
   // const onChangeId = (e) => { // Using custom hook in bottom
   //   setId(e.target.value);
@@ -37,14 +35,14 @@ const Signup = () => {
   //   setNick(e.target.value);
   // };
 
-  const onChangePass = (e) => {
+  const onChangePass = useCallback((e) => {
     setPass(e.target.value);
-  };
+  }, []);
 
-  const onChangePassChk = (e) => {
+  const onChangePassChk = useCallback((e) => {
     setPassError(e.target.value !== pass);
     setPassChk(e.target.value);
-  };
+  }, [pass]);
 
   const onChangeTerm = (e) => {
     setTermError(false);
@@ -54,9 +52,9 @@ const Signup = () => {
   // Custom hook
   const useInput = (initValue = null) => {
     const [value, setter] = useState(initValue);
-    const handler = (e) => {
+    const handler = useCallback((e) => {
       setter(e.target.value);
-    };
+    }, []);
 
     return [value, handler];
   }
@@ -66,44 +64,38 @@ const Signup = () => {
 
   return (
     <>
-      <Head>
-        <title>NodeBird</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.20.5/antd.css"/>
-      </Head>
-      <AppLayout>
-        <Form onSubmit={onSubmit} style={{ padding: 10 }}>
-          <div>
-            <label htmlFor="user-id">ID</label>
-            <br/>
-            <Input name="user-id" required value={id} onChange={onChangeId}/>
-          </div>
-          <div>
-            <label htmlFor="user-nick">Nickname</label>
-            <br/>
-            <Input name="user-nick" required value={nick} onChange={onChangedNick}/>
-          </div>
-          <div>
-            <label htmlFor="user-pass">Password</label>
-            <br/>
-            <Input name="user-pass" type="password" required value={pass} onChange={onChangePass}/>
-          </div>
-          <div>
-            <label htmlFor="user-pass-chk">Password Check</label>
-            <br/>
-            <Input name="user-pass-chk" type="password" required value={passChk} onChange={onChangePassChk}/>
-            {passError && <div style={{ color: 'red' }}>Please check password</div>}
-          </div>
-          <div>
-            <Checkbox name="user-term" value={term} onChange={onChangeTerm}>
-              Are you agree this term?
-            </Checkbox>
-            {termError && <div style={{ color: 'red' }}>You must agrre term</div>}
-          </div>
-          <div>
-            <Button type="primary" htmlType="submit">Register</Button>
-          </div>
-        </Form>
-      </AppLayout>
+      <Form onSubmit={onSubmit} style={{ padding: 10 }}>
+        <div>
+          <label htmlFor="user-id">ID</label>
+          <br/>
+          <Input name="user-id" required value={id} onChange={onChangeId}/>
+        </div>
+        <div>
+          <label htmlFor="user-nick">Nickname</label>
+          <br/>
+          <Input name="user-nick" required value={nick} onChange={onChangedNick}/>
+        </div>
+        <div>
+          <label htmlFor="user-pass">Password</label>
+          <br/>
+          <Input name="user-pass" type="password" required value={pass} onChange={onChangePass}/>
+        </div>
+        <div>
+          <label htmlFor="user-pass-chk">Password Check</label>
+          <br/>
+          <Input name="user-pass-chk" type="password" required value={passChk} onChange={onChangePassChk}/>
+          {passError && <div style={{ color: 'red' }}>Please check password</div>}
+        </div>
+        <div>
+          <Checkbox name="user-term" value={term} onChange={onChangeTerm}>
+            Are you agree this term?
+          </Checkbox>
+          {termError && <div style={{ color: 'red' }}>You must agrre term</div>}
+        </div>
+        <div>
+          <Button type="primary" htmlType="submit">Register</Button>
+        </div>
+      </Form>
     </>
   );
 };
