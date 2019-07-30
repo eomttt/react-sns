@@ -10,8 +10,8 @@ const mock = {
 };
 
 const UserProfile = () => {
-	return (
-		<>
+  return (
+    <>
       <Card
         actions={[
           <div key="twit">짹짹<br />{mock.Post.length}</div>,
@@ -24,8 +24,8 @@ const UserProfile = () => {
           title={mock.nickname}
         />
       </Card>
-		</>
-	)
-}
-
-export default UserProfile;
+    </>
+    )
+  }
+  
+  export default UserProfile;
