@@ -1,5 +1,13 @@
 export const initialState = {
-  mainPosts: [],
+  imagePaths: [],
+  mainPosts: [{
+    User: {
+      id: 1,
+      nickname: 'MockNickName',
+    },
+    content: 'First card',
+    img: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
+  }],
 };
 
 const ADD_POST = 'ADD_POST'; // Action nam

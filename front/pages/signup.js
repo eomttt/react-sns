@@ -1,11 +1,18 @@
 import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { Form, Input, Checkbox, Button } from 'antd';
+import { signUpAction } from '../reducers/user';
 
 import { useInput } from '../components/LoginForm';
 
 const Signup = () => {
+  const dispatch = useDispatch();
   // const [id, setId] = useState(''); // Using custom hook in bottom
   // const [nick, setNick] = useState(''); // Using custom hook in bottom
+
+  const [id, onChangeId] = useInput('');
+  const [nick, onChangedNick] = useInput('');
+
   const [pass, setPass] = useState('');
   const [passChk, setPassChk] = useState('');
   const [term, setTerm] = useState('');
@@ -24,9 +31,11 @@ const Signup = () => {
       return setTermError(true);
     }
 
-    console.log({
-      id, nick, pass, passChk, term
-    })
+    dispatch(signUpAction({
+      id,
+      pass,
+      nick,
+    }));
   }, [pass, passChk, term]);
 
   // const onChangeId = (e) => { // Using custom hook in bottom
@@ -50,11 +59,6 @@ const Signup = () => {
     setTermError(false);
     setTerm(e.target.checked);
   };
-
-
-
-  const [id, onChangeId] = useInput('');
-  const [nick, onChangedNick] = useInput('');
 
   return (
     <>

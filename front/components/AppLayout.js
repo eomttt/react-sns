@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux'
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Menu, Input, Row, Col } from 'antd';
@@ -6,15 +7,9 @@ import { Menu, Input, Row, Col } from 'antd';
 import LoginForm from '../components/LoginForm';
 import UserProfile from '../components/UserProfile';
 
-const mock = {
-  nickname: 'MockNickName',
-  Post: [],
-  Followings: [],
-  Followers: [],
-  isLoggedIn: false
-};
-
 const AppLayout = ({ children }) => {
+  const { isLoggedIn } = useSelector(state => state.user);
+
   return (
     <div>
       <Menu mode="horizontal">
@@ -25,7 +20,7 @@ const AppLayout = ({ children }) => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {
-            mock.isLoggedIn
+            isLoggedIn
             ? <UserProfile/>
             : <LoginForm/>
           }
