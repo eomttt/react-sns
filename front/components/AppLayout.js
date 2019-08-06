@@ -8,6 +8,7 @@ import LoginForm from '../components/LoginForm';
 import UserProfile from '../components/UserProfile';
 
 const AppLayout = ({ children }) => {
+  // Get from store
   const { isLoggedIn } = useSelector(state => state.user);
 
   return (

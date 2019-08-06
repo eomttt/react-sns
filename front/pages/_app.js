@@ -7,7 +7,6 @@ import { Provider } from 'react-redux'
 
 import reducers from '../reducers';
 import AppLayout from '../components/AppLayout';
-import { initialState } from '../reducers/user';
 
 const NodeBird = ({ Component, store }) => {
   // Using Provider link react with redux

@@ -12,7 +12,7 @@ export const initialState = {
   loginData: {},
 };
 
-// Action name
+// Action types
 const SIGN_UP = 'SIGN_UP';
 const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 const LOG_IN = 'LOG_IN';
@@ -20,6 +20,7 @@ const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
+// Actions creators
 export const signUpAction = (data) => {
   return {
     type: SIGN_UP,
@@ -44,6 +45,7 @@ export const logoutAction = () => {
   }
 };
 
+// reducers
 export default (state = initialState, action) => {
   const {type, payload} = action;
 

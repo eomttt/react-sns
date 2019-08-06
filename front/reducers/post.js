@@ -10,9 +10,11 @@ export const initialState = {
   }],
 };
 
+// Action types
 const ADD_POST = 'ADD_POST'; // Action nam
 const ADD_DUMMY = 'ADD_DUMMY';
 
+// Action creators
 export const addPost = {
   type: ADD_POST,
 };
@@ -21,6 +23,7 @@ export const addDummy = {
   type: ADD_DUMMY,
 };
 
+// reducers
 export default (state = initialState, action) => {
   const { type } = action;
   switch (type) {
