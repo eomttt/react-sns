@@ -15,7 +15,7 @@ const AppLayout = ({ children }) => {
     <div>
       <Menu mode="horizontal">
         <Menu.Item key="home"><Link href="/">NodeBird</Link></Menu.Item>
-        <Menu.Item key="profile"><Link href="1/profile">Profile</Link></Menu.Item>
+        <Menu.Item key="profile"><Link href="profile">Profile</Link></Menu.Item>
         <Menu.Item key="mail"><Input.Search enterButton style={{ verticalAlign: 'middle' }} /></Menu.Item>
       </Menu>
       <Row gutter={8}>
