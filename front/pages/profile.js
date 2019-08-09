@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { List, Card, Icon, Button } from 'antd';
 
 import NicknameEditForm from '../components/NicknameEditForm';
 
 const Profile = () => {
+  useEffect(() => {
+    console.log('Rendered profile page');
+  }, []);
+
   return (
     <>
-      <NicknameEditForm/>
+      <NicknameEditForm />
       <List
         style={{ marginTop: '20px' }}
         grid={{ gutter: 4, xs: 2, md: 3 }}

@@ -8,10 +8,10 @@ const PostCard = ({ post }) => {
       key={+post.createdAt}
       cover={post.img && <img alt="example" src={post.img}/>}
       actions={[
-          <Icon type="retweet" key="retweet" />,
-          <Icon type="heart" key="heart" />,
-          <Icon type="message" key="message" />,
-          <Icon type="ellipsis" key="ellipsis" />,
+        <Icon type="retweet" key="retweet" />,
+        <Icon type="heart" key="heart" />,
+        <Icon type="message" key="message" />,
+        <Icon type="ellipsis" key="ellipsis" />,
       ]}
       extra={<Button>팔로우</Button>}
     >
@@ -21,16 +21,16 @@ const PostCard = ({ post }) => {
         description={post.content}
       />
     </Card>
-    )
-  }
-  
-  PostCard.propTypes = {
-    post: PropTypes.shape({
-      User: PropTypes.object,
-      content: PropTypes.string,
-      img: PropTypes.string,
-      createdAt: PropTypes.object,
-    })
-  }
-  
-  export default PostCard;
+  );
+};
+
+PostCard.propTypes = {
+  post: PropTypes.shape({
+    User: PropTypes.object,
+    content: PropTypes.string,
+    img: PropTypes.string,
+    createdAt: PropTypes.object,
+  }).isRequired,
+};
+
+export default PostCard;

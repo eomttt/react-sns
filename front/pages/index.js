@@ -12,9 +12,7 @@ const Home = () => {
     <div>
       {isLoggedIn && <PostForm />}
       {
-        mainPosts.map((v) => {
-          return <PostCard key={v} post={v} />
-        })
+        mainPosts.map(v => <PostCard key={v} post={v} />)
       }
     </div>
   );

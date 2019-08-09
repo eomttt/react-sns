@@ -17,15 +17,15 @@ const NodeBird = ({ Component, store }) => {
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.20.5/antd.css"/>
       </Head>
       <AppLayout>
-        <Component/>
+        <Component />
       </AppLayout>
     </Provider>
   );
 };
 
 NodeBird.propTypes = {
-  Component: PropTypes.elementType,
-  store: PropTypes.object
+  Component: PropTypes.elementType.isRequired,
+  store: PropTypes.object.isRequired,
 }
 
 export default withRedux((initialState, options) => {

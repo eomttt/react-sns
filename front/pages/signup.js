@@ -65,23 +65,23 @@ const Signup = () => {
       <Form onSubmit={onSubmit} style={{ padding: 10 }}>
         <div>
           <label htmlFor="user-id">ID</label>
-          <br/>
-          <Input name="user-id" required value={id} onChange={onChangeId}/>
+          <br />
+          <Input name="user-id" required value={id} onChange={onChangeId} />
         </div>
         <div>
           <label htmlFor="user-nick">Nickname</label>
-          <br/>
-          <Input name="user-nick" required value={nick} onChange={onChangedNick}/>
+          <br />
+          <Input name="user-nick" required value={nick} onChange={onChangedNick} />
         </div>
         <div>
           <label htmlFor="user-pass">Password</label>
-          <br/>
-          <Input name="user-pass" type="password" required value={pass} onChange={onChangePass}/>
+          <br />
+          <Input name="user-pass" type="password" required value={pass} onChange={onChangePass} />
         </div>
         <div>
           <label htmlFor="user-pass-chk">Password Check</label>
-          <br/>
-          <Input name="user-pass-chk" type="password" required value={passChk} onChange={onChangePassChk}/>
+          <br />
+          <Input name="user-pass-chk" type="password" required value={passChk} onChange={onChangePassChk} />
           {passError && <div style={{ color: 'red' }}>Please check password</div>}
         </div>
         <div>

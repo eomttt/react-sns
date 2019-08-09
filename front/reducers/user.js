@@ -21,35 +21,29 @@ const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 const LOG_OUT = 'LOG_OUT';
 
 // Actions creators
-export const signUpAction = (data) => {
-  return {
-    type: SIGN_UP,
-    payload: {
-      signUpData: data
-    }
-  }
-};
+export const signUpAction = data => ({
+  type: SIGN_UP,
+  payload: {
+    signUpData: data,
+  },
+});
 
-export const loginAction = (data) => {
-  return {
-    type: LOG_IN,
-    payload: {
-      loginData: data
-    }
-  };
-};
+export const loginAction = data => ({
+  type: LOG_IN,
+  payload: {
+    loginData: data,
+  },
+});
 
-export const logoutAction = () => {
-  return {
-    type: LOG_OUT
-  }
-};
+export const logoutAction = () => ({
+  type: LOG_OUT,
+});
 
 // reducers
 export default (state = initialState, action) => {
-  const {type, payload} = action;
+  const { type, payload } = action;
 
-  switch(type) {
+  switch (type) {
     case SIGN_UP: {
       return {
         ...state,
@@ -63,8 +57,8 @@ export default (state = initialState, action) => {
         ...state,
         isLoggedIn: true,
         user: mockUser,
-        loginData: payload.loginData
-      }
+        loginData: payload.loginData,
+      };
     case LOG_IN_SUCCESS:
       return state;
     case LOG_IN_FAILURE:
@@ -73,8 +67,8 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoggedIn: false,
-        user: {}
-      }
+        user: {},
+      };
     default:
       return state;
   }
