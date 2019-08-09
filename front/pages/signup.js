@@ -1,12 +1,14 @@
-import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Checkbox, Button } from 'antd';
-import { signUpAction } from '../reducers/user';
+import Router from 'next/router';
+import { signUpRequestAction } from '../reducers/user';
 
 import { useInput } from '../components/LoginForm';
 
 const Signup = () => {
   const dispatch = useDispatch();
+  const { isSigningUp, me } = useSelector(state => state.user);
   // const [id, setId] = useState(''); // Using custom hook in bottom
   // const [nick, setNick] = useState(''); // Using custom hook in bottom
 
@@ -20,6 +22,13 @@ const Signup = () => {
   const [passError, setPassError] = useState(false);
   const [termError, setTermError] = useState(false);
 
+  useEffect(() => {
+    if (me) {
+      alert('Move to mainpage because logged in.');
+      Router.push('/');
+    }
+  }, [me && me.id]);
+
   const onSubmit = useCallback((e) => {
     e.preventDefault();
 
@@ -31,7 +40,7 @@ const Signup = () => {
       return setTermError(true);
     }
 
-    dispatch(signUpAction({
+    return dispatch(signUpRequestAction({
       id,
       pass,
       nick,
@@ -91,7 +100,7 @@ const Signup = () => {
           {termError && <div style={{ color: 'red' }}>You must agrre term</div>}
         </div>
         <div>
-          <Button type="primary" htmlType="submit">Register</Button>
+          <Button type="primary" htmlType="submit" loading={isSigningUp}>Register</Button>
         </div>
       </Form>
     </>

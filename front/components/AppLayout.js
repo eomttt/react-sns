@@ -28,7 +28,7 @@ const AppLayout = ({ children }) => {
         <Col xs={24} md={6}><a href="https://www.zerocho.com" target="_blank" rel="noopener noreferrer">Made by ZeroCho</a></Col>
       </Row>
     </div>
-  )
+  );
 };
 
 AppLayout.propTypes = {

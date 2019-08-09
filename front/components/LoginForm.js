@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button } from 'antd';
 
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 // Custom hook
 export const useInput = (initValue = null) => {
@@ -17,13 +17,14 @@ export const useInput = (initValue = null) => {
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const { isLoggingIn } = useSelector(state => state.user);
 
   const [id, onChangeId] = useInput('');
   const [pass, onChangePass] = useInput('');
 
   const onSubmitForm = useCallback((e) => {
     e.preventDefault();
-    dispatch(loginAction({
+    dispatch(loginRequestAction({
       id,
       pass,
     }));
@@ -35,16 +36,16 @@ const LoginForm = () => {
         <div>
           <label htmlFor="user-id">ID</label>
           <br />
-          <Input name="user-id" required value={id} onChange={onChangeId}/>
+          <Input name="user-id" required value={id} onChange={onChangeId} />
         </div>
         <div>
           <label htmlFor="user-pass">Password</label>
           <br />
-          <Input name="user-pass" type="password" required value={pass} onChange={onChangePass}/>
+          <Input name="user-pass" type="password" required value={pass} onChange={onChangePass} />
         </div>
-        <div style={{marginTop: '10px' }}>
-          <Button type="primary" htmlType="submit" loading={false}>LogIn</Button>
-          <Link href="/signup"><a><Button>SignUp</Button></a></Link>
+        <div style={{ marginTop: '10px' }}>
+          <Button type="primary" htmlType="submit" loading={isLoggingIn}>LogIn</Button>
+          <Link href="/signup"><Button>SignUp</Button></Link>
         </div>
       </Form>
     </>

@@ -3,9 +3,11 @@ import Head from 'next/head';
 import PropTypes from 'prop-types';
 import withRedux from 'next-redux-wrapper'; // With redux in next
 import { applyMiddleware, compose, createStore } from 'redux';
-import { Provider } from 'react-redux'
+import createSagaMiddleware from 'redux-saga';
+import { Provider } from 'react-redux';
 
 import reducers from '../reducers';
+import rootSaga from '../sagas';
 import AppLayout from '../components/AppLayout';
 
 const NodeBird = ({ Component, store }) => {
@@ -26,15 +28,20 @@ const NodeBird = ({ Component, store }) => {
 NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,
   store: PropTypes.object.isRequired,
-}
+};
 
-export default withRedux((initialState, options) => {
-  const middlewares = [];
-  const enhancer = compose(
-    applyMiddleware(...middlewares),
-    !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f, // For debuggin redux
-  );
-
-  const store = createStore(reducers, initialState, enhancer); // Create redux store
+const configureStore = (initialState, options) => {
+  const sagaMiddleware = createSagaMiddleware();
+  const middlewares = [sagaMiddleware];
+  const enhancer = process.env.NODE_ENV === 'production'
+    ? compose(applyMiddleware(...middlewares))
+    : compose(
+      applyMiddleware(...middlewares),
+      !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f,
+    );
+  const store = createStore(reducers, initialState, enhancer);
+  sagaMiddleware.run(rootSaga);
   return store;
-})(NodeBird);
+};
+
+export default withRedux(configureStore)(NodeBird);
