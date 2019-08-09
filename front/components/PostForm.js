@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 
@@ -16,12 +16,12 @@ const PostForm = () => {
     }
   }, [postAdded]);
 
-  const onSubmitForm = useCallback((e) => {
+  const onSubmitForm = (e) => {
     e.preventDefault();
     dispatch(actions.addPostRequest({
       text,
     }));
-  }, []);
+  };
 
   const onChangeText = (e) => {
     setText(e.target.value);

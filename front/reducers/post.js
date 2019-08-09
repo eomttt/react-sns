@@ -3,9 +3,9 @@ export const initialState = {
     id: 1,
     User: {
       id: 1,
-      nickname: '제로초',
+      nickname: 'MockUser',
     },
-    content: '첫 번째 게시글',
+    content: 'First content',
     img: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
     Comments: [],
   }], // 화면에 보일 포스트들
@@ -13,16 +13,29 @@ export const initialState = {
   addPostErrorReason: '', // 포스트 업로드 실패 사유
   isAddingPost: false, // 포스트 업로드 중
   postAdded: false, // 포스트 업로드 성공
+  isAddingComment: false,
+  addCommentErrorReason: '',
+  commentAdded: false,
 };
 
 const dummyPost = {
   id: 2,
   User: {
     id: 1,
-    nickname: '제로초',
+    nickname: 'MockUser',
   },
-  content: '나는 더미입니다.',
+  content: 'Dummy POST',
   Comments: [],
+};
+
+const dummyComment = {
+  id: 1,
+  User: {
+    id: 1,
+    nickname: 'MockUser',
+  },
+  createdAt: new Date(),
+  content: 'Dummy REPLY',
 };
 
 
@@ -31,12 +44,24 @@ export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
 // Action creators
-export const addPostRequest = () => {
-  return {
-    type: ADD_POST_REQUEST,
-  };
-};
+export const addPostRequest = data => ({
+  type: ADD_POST_REQUEST,
+  payload: {
+    addPostData: data,
+  },
+});
+
+export const addCommentRequest = data => ({
+  type: ADD_COMMENT_REQUEST,
+  payload: {
+    addCommentData: data,
+  },
+});
 
 // reducers
 export default (state = initialState, action) => {
@@ -61,6 +86,33 @@ export default (state = initialState, action) => {
         ...state,
         isAddingPost: false,
         addPostErrorReason: payload.error,
+      };
+    case ADD_COMMENT_REQUEST:
+      return {
+        ...state,
+        isAddingComment: true,
+        commentAdded: false,
+        addCommentErrorReason: '',
+      };
+    case ADD_COMMENT_SUCCESS:
+      const postIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
+      const post = state.mainPosts[postIndex];
+      const Comments = [...post.Comments, dummyComment];
+
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, Comments };
+
+      return {
+        ...state,
+        isAddingComment: false,
+        commentAdded: true,
+        mainPosts,
+      };
+    case ADD_COMMENT_FAILURE:
+      return {
+        ...state,
+        isAddingComment: false,
+        addCommentErrorReason: payload.error,
       };
     default:
       return state;

@@ -10,7 +10,7 @@ function loginApi() {
 function* login({ payload }) {
   try {
     const { loginData } = payload;
-
+    console.log('Login data', loginData);
     // yield call(loginApi);
     yield delay(2000);
     yield put({
@@ -56,6 +56,7 @@ function signUpApi() {
 function* signUp({ payload }) {
   try {
     const { signUpData } = payload;
+    console.log('Sign up data', signUpData);
     // yield call(signUpApi);
     yield delay(2000);
     yield put({
