@@ -65,7 +65,7 @@ export const addCommentRequest = data => ({
 
 // reducers
 export default (state = initialState, action) => {
-  const { type, payload } = action;
+  const { type, payload, error } = action;
   switch (type) {
     case ADD_POST_REQUEST:
       return {
@@ -85,7 +85,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isAddingPost: false,
-        addPostErrorReason: payload.error,
+        addPostErrorReason: error,
       };
     case ADD_COMMENT_REQUEST:
       return {
@@ -112,7 +112,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isAddingComment: false,
-        addCommentErrorReason: payload.error,
+        addCommentErrorReason: error,
       };
     default:
       return state;

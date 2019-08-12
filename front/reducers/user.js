@@ -54,7 +54,7 @@ export const logoutRequestAction = () => ({
 
 // reducers
 export default (state = initialState, action) => {
-  const { type, payload } = action;
+  const { type, payload, error } = action;
 
   switch (type) {
     case SIGN_UP_REQUEST: {
@@ -76,7 +76,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isSigningUp: false,
-        signUpErrorReason: payload.error,
+        signUpErrorReason: error,
       };
     }
     case LOG_IN_REQUEST:
@@ -98,7 +98,7 @@ export default (state = initialState, action) => {
         ...state,
         isLoggingIn: false,
         isLoggedIn: false,
-        logInErrorReason: payload.error,
+        logInErrorReason: error,
         me: null,
       };
     case LOG_OUT_REQUEST:

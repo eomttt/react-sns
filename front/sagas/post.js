@@ -20,9 +20,7 @@ function* addPost({ payload }) {
     console.error('Add post error. ', error);
     yield put({
       type: actions.ADD_POST_FAILURE,
-      payload: {
-        error,
-      },
+      error,
     });
   }
 }
@@ -47,9 +45,7 @@ function* addComment({ payload }) {
     console.error('Add comment error. ', error);
     yield put({
       type: actions.ADD_COMMENT_FAILURE,
-      payload: {
-        error,
-      },
+      error,
     });
   }
 }

@@ -20,9 +20,7 @@ function* login({ payload }) {
     console.error('Login error. ', error);
     yield put({
       type: actions.LOG_IN_FAILURE,
-      payload: {
-        error,
-      },
+      error,
     });
   }
 }
@@ -66,9 +64,7 @@ function* signUp({ payload }) {
     console.error(error);
     yield put({
       type: actions.SIGN_UP_FAILURE,
-      payload: {
-        error,
-      },
+      error,
     });
   }
 }
