@@ -4,13 +4,14 @@ mongoose.Promise = global.Promise;
 
 const { Schema } = mongoose;
 const model = {
-  userId: {
-    type: String,
-  },
   content: {
     type: String,
   },
+  posts: {
+    type: Array,
+    default: [],
+  },
 };
-const postsSchema = new Schema(model);
+const hashTagSchema = new Schema(model);
 
-module.exports = mongoose.model('Posts', postsSchema);
+module.exports = mongoose.model('HashTag', hashTagSchema);

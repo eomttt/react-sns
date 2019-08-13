@@ -1,14 +1,5 @@
 export const initialState = {
-  mainPosts: [{
-    id: 1,
-    User: {
-      id: 1,
-      nickname: 'MockUser',
-    },
-    content: 'First content',
-    img: 'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
-    Comments: [],
-  }], // 화면에 보일 포스트들
+  mainPosts: [], // 화면에 보일 포스트들
   imagePaths: [], // 미리보기 이미지 경로
   addPostErrorReason: '', // 포스트 업로드 실패 사유
   isAddingPost: false, // 포스트 업로드 중
@@ -16,16 +7,6 @@ export const initialState = {
   isAddingComment: false,
   addCommentErrorReason: '',
   commentAdded: false,
-};
-
-const dummyPost = {
-  id: 2,
-  User: {
-    id: 1,
-    nickname: 'MockUser',
-  },
-  content: 'Dummy POST',
-  Comments: [],
 };
 
 const dummyComment = {
@@ -48,6 +29,10 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
+export const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
+export const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
+export const LOAD_MAIN_POSTS_FAILURE = 'LOAD_MAIN_POSTS_FAILURE';
+
 // Action creators
 export const addPostRequest = data => ({
   type: ADD_POST_REQUEST,
@@ -61,6 +46,10 @@ export const addCommentRequest = data => ({
   payload: {
     addCommentData: data,
   },
+});
+
+export const loadMainPostsRequest = () => ({
+  type: LOAD_MAIN_POSTS_REQUEST,
 });
 
 // reducers
@@ -79,7 +68,7 @@ export default (state = initialState, action) => {
         ...state,
         isAddingPost: false,
         postAdded: true,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [payload.data, ...state.mainPosts],
       };
     case ADD_POST_FAILURE:
       return {
@@ -113,6 +102,19 @@ export default (state = initialState, action) => {
         ...state,
         isAddingComment: false,
         addCommentErrorReason: error,
+      };
+    case LOAD_MAIN_POSTS_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_MAIN_POSTS_SUCCESS:
+      return {
+        ...state,
+        mainPosts: payload.data,
+      };
+    case LOAD_MAIN_POSTS_FAILURE:
+      return {
+        ...state,
       };
     default:
       return state;

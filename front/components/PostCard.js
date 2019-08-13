@@ -26,8 +26,8 @@ const PostCard = ({ post }) => {
         extra={<Button>팔로우</Button>}
       >
         <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname}
+          avatar={<Avatar>{post.user.nickname[0][0]}</Avatar>}
+          title={post.user.nickname[0]}
           description={post.content}
         />
       </Card>
@@ -45,7 +45,7 @@ const PostCard = ({ post }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
-    User: PropTypes.object,
+    user: PropTypes.object,
     content: PropTypes.string,
     img: PropTypes.string,
     createdAt: PropTypes.object,

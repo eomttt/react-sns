@@ -1,5 +1,4 @@
 export const initialState = {
-  isLoggedIn: false, // 로그인 여부
   isLoggingOut: false, // 로그아웃 시도중
   isLoggingIn: false, // 로그인 시도중
   logInErrorReason: '', // 로그인 실패 사유

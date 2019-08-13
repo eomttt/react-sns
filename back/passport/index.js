@@ -1,15 +1,13 @@
 const passport = require('passport');
-const mongoose = require('mongoose');
 const local = require('./local');
 
-const { ObjectId } = mongoose.Types;
 const UserModel = require('../models/user');
 
 module.exports = () => {
   // req.login 할 때 실행, 서버쪽에 [{id: 3, cookie: 'asdfgh'}]
   passport.serializeUser((user, done) => { // Strategy 성공 시 호출됨
-    console.log('Serialize', user._id);
-    return done(null, user._id); // 여기의 user._id가 req.session.passport.user에 저장
+    console.log('Serialize', user.userId);
+    return done(null, user.userId); // 여기의 user.userId가 req.session.passport.user에 저장
   });
 
   passport.deserializeUser(async (id, done) => { // 매개변수 id는 req.session.passport.user에 저장된 값
@@ -18,13 +16,13 @@ module.exports = () => {
 
       const user = await UserModel.aggregate([{
         $match: {
-          _id: new ObjectId(id),
+          userId: id,
         },
       }, {
         $lookup: {
           from: 'posts',
-          localField: 'userId',
-          foreignField: '_id',
+          localField: 'userId', // Standard key from now db(User)
+          foreignField: 'userId', // Find key by from db(Posts)
           as: 'user_posts',
         },
       }, {
@@ -33,7 +31,7 @@ module.exports = () => {
           userId: '$userId',
           followings: '$followings',
           followers: '$followers',
-          posts: '$user_posts',
+          posts: '$user_posts._id',
         },
       }]);
 

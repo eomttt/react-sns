@@ -6,7 +6,7 @@ const UserModel = require('../models/user');
 
 const router = express.Router();
 
-router.get('/', (req, res) => { // /api/user/
+router.get('/', (req, res) => { // GET /api/user/
   if (!req.user) {
     return res.status(401).send('Please login');
   }
@@ -39,11 +39,11 @@ router.post('/', async (req, res, next) => { // POST /api/user 회원가입
   }
 });
 
-router.get('/:id', (req, res) => { // 남의 정보 가져오는 것 ex) /api/user/123
+router.get('/:id', (req, res) => { // 남의 정보 가져오는 것 ex) GET /api/user/123
 
 });
 
-router.post('/logout', (req, res) => { // /api/user/logout
+router.post('/logout', (req, res) => { // POST /api/user/logout
   req.logout();
   req.session.destroy();
   res.send('Logout');
@@ -51,8 +51,6 @@ router.post('/logout', (req, res) => { // /api/user/logout
 
 router.post('/login', (req, res, next) => { // POST /api/user/login
   passport.authenticate('local', (error, user, info) => {
-    console.log(error, info, user);
-
     if (error) {
       return next(error);
     }
@@ -66,18 +64,15 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
         if (loginError) {
           return next(loginError);
         }
-
-        console.log('Req user', req.user);
-
         const fullUser = await UserModel.aggregate([{
           $match: {
-            _id: req.user._id,
+            userId: req.user.userId,
           },
         }, {
           $lookup: {
             from: 'posts',
-            localField: 'userId',
-            foreignField: '_id',
+            localField: 'userId', // Standard key from now db(User)
+            foreignField: 'userId', // Find key by from db(Posts)
             as: 'user_posts',
           },
         }, {
@@ -86,9 +81,9 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
             userId: '$userId',
             followings: '$followings',
             followers: '$followers',
-            posts: '$user_posts',
+            posts: '$user_posts._id',
           },
-        }]);
+        }]).exec();
 
         console.log('Full user', fullUser[0]);
 
@@ -100,7 +95,7 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
   })(req, res, next);
 });
 
-router.get('/:id/follow', (req, res) => { // /api/user/:id/follow
+router.get('/:id/follow', (req, res) => { // GET /api/user/:id/follow
 
 });
 router.post('/:id/follow', (req, res) => {
