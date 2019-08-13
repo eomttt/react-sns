@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux'
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Menu, Input, Row, Col } from 'antd';
@@ -7,9 +7,16 @@ import { Menu, Input, Row, Col } from 'antd';
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
 
+import * as userActions from '../reducers/user';
+
 const AppLayout = ({ children }) => {
+  const dispatch = useDispatch();
   // Get from store
-  const { isLoggedIn } = useSelector(state => state.user);
+  const { me } = useSelector(state => state.user);
+
+  useEffect(() => {
+    dispatch(userActions.loadUserReuqestAction());
+  }, []);
 
   return (
     <div>
@@ -21,7 +28,7 @@ const AppLayout = ({ children }) => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {
-            isLoggedIn ? <UserProfile /> : <LoginForm />
+            me ? <UserProfile /> : <LoginForm />
           }
         </Col>
         <Col xs={24} md={12}>{children}</Col>

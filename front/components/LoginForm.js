@@ -25,8 +25,8 @@ const LoginForm = () => {
   const onSubmitForm = useCallback((e) => {
     e.preventDefault();
     dispatch(loginRequestAction({
-      id,
-      pass,
+      userId: id,
+      password: pass,
     }));
   }, [id, pass]);
 

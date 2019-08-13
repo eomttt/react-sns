@@ -41,11 +41,11 @@ const Signup = () => {
     }
 
     return dispatch(signUpRequestAction({
-      id,
-      pass,
-      nick,
+      userId: id,
+      password: pass,
+      nickname: nick,
     }));
-  }, [pass, passChk, term]);
+  }, [id, nick, pass, passChk, term]);
 
   // const onChangeId = (e) => { // Using custom hook in bottom
   //   setId(e.target.value);

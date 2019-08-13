@@ -1,11 +1,3 @@
-const mockUser = {
-  nickname: 'MockUserRedux',
-  Post: [],
-  Followings: [],
-  Followers: [],
-  id: 1,
-};
-
 export const initialState = {
   isLoggedIn: false, // 로그인 여부
   isLoggingOut: false, // 로그아웃 시도중
@@ -33,6 +25,10 @@ export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
 // Actions creators
 export const signUpRequestAction = data => ({
   type: SIGN_UP_REQUEST,
@@ -50,6 +46,10 @@ export const loginRequestAction = data => ({
 
 export const logoutRequestAction = () => ({
   type: LOG_OUT_REQUEST,
+});
+
+export const loadUserReuqestAction = () => ({
+  type: LOAD_USER_REQUEST,
 });
 
 // reducers
@@ -89,15 +89,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isLoggingIn: false,
-        isLoggedIn: true,
-        me: mockUser,
-        isLoading: false,
+        me: payload.data,
       };
     case LOG_IN_FAILURE:
       return {
         ...state,
         isLoggingIn: false,
-        isLoggedIn: false,
         logInErrorReason: error,
         me: null,
       };
@@ -109,14 +106,26 @@ export default (state = initialState, action) => {
     case LOG_OUT_SUCCESS:
       return {
         ...state,
-        isLoggedIn: false,
         isLoggingOut: false,
-        me: {},
+        me: null,
       };
     case LOG_OUT_FAILURE:
       return {
         ...state,
         isLoggingOut: false,
+      };
+    case LOAD_USER_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_USER_SUCCESS:
+      return {
+        ...state,
+        me: payload.data,
+      };
+    case LOAD_USER_FAILURE:
+      return {
+        ...state,
       };
     default:
       return state;
