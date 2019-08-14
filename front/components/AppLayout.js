@@ -1,5 +1,6 @@
+
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Menu, Input, Row, Col } from 'antd';
@@ -18,12 +19,17 @@ const AppLayout = ({ children }) => {
     dispatch(userActions.loadUserReuqestAction());
   }, []);
 
+  const yoyo = 'yoyo';
+  const wowo = 'wowo';
+
   return (
     <div>
       <Menu mode="horizontal">
-        <Menu.Item key="home"><Link href="/">NodeBird</Link></Menu.Item>
-        <Menu.Item key="profile"><Link href="profile">Profile</Link></Menu.Item>
+        <Menu.Item key="home"><Link href="/"><a>NodeBird</a></Link></Menu.Item>
+        <Menu.Item key="profile"><Link href="/profile"><a>Profile</a></Link></Menu.Item>
         <Menu.Item key="mail"><Input.Search enterButton style={{ verticalAlign: 'middle' }} /></Menu.Item>
+        <Menu.Item key="hash1"><Link href="/hashtag/[tag]" as={`/hashtag/${yoyo}`}><a>yoyo</a></Link></Menu.Item>
+        <Menu.Item key="hash2"><Link href="/hashtag/[tag]" as={`/hashtag/${wowo}`}><a>wowo</a></Link></Menu.Item>
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
