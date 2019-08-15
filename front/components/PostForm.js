@@ -33,7 +33,7 @@ const PostForm = () => {
       <div>
         <input type="file" multiple hidden />
         <Button>Upload Image</Button>
-        <Button type="primary" htmlType="submit" loading={isAddingPost}>TWIT</Button>
+        <Button style={{ float: 'right' }} type="primary" htmlType="submit" loading={isAddingPost}>TWIT</Button>
       </div>
       <div>
         {

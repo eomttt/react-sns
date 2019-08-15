@@ -37,6 +37,10 @@ export const LOAD_HASHTAG_POSTS_REQUEST = 'LOAD_HASHTAG_POSTS_REQUEST';
 export const LOAD_HASHTAG_POSTS_SUCCESS = 'LOAD_HASHTAG_POSTS_SUCCESS';
 export const LOAD_HASHTAG_POSTS_FAILURE = 'LOAD_HASHTAG_POSTS_FAILURE';
 
+export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
+export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
+export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
+
 // Action creators
 export const addPostRequest = data => ({
   type: ADD_POST_REQUEST,
@@ -60,6 +64,13 @@ export const loadHashTagPostsRequest = data => ({
   type: LOAD_HASHTAG_POSTS_REQUEST,
   payload: {
     tag: data,
+  },
+});
+
+export const loadUserPostsRequest = data => ({
+  type: LOAD_USER_POSTS_REQUEST,
+  payload: {
+    userId: data,
   },
 });
 
@@ -137,6 +148,19 @@ export default (state = initialState, action) => {
         mainPosts: payload.data,
       };
     case LOAD_HASHTAG_POSTS_FAILURE:
+      return {
+        ...state,
+      };
+    case LOAD_USER_POSTS_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_USER_POSTS_SUCCESS:
+      return {
+        ...state,
+        mainPosts: payload.data,
+      };
+    case LOAD_USER_POSTS_FAILURE:
       return {
         ...state,
       };

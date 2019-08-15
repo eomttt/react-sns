@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link'
 import PropTypes from 'prop-types';
 import { Card, Avatar, Icon, Button } from 'antd';
 
@@ -14,7 +15,7 @@ const PostCard = ({ post }) => {
   };
 
   return (
-    <div>
+    <div style={{ marginTop: '2em' }}>
       <Card
         key={+post.createdAt}
         cover={post.img && <img alt="example" src={post.img} />}
@@ -27,7 +28,7 @@ const PostCard = ({ post }) => {
         extra={<Button>팔로우</Button>}
       >
         <Card.Meta
-          avatar={<Avatar>{post.user.nickname[0][0]}</Avatar>}
+          avatar={<Link href="/user/[userid]" as={`/user/${post.user.userId[0]}`}><a><Avatar>{post.user.nickname[0][0]}</Avatar></a></Link>}
           title={post.user.nickname[0]}
           description={<PostCardContent content={post.content} />}
         />

@@ -82,7 +82,7 @@ function loadHashTagPostsApi(tag) {
 function* loadHashTagPosts({ payload }) {
   try {
     const { tag } = payload;
-    console.log('Get hashtagposts. ', tag);
+    console.log('Get hashtag posts. ', tag);
     const { data } = yield call(loadHashTagPostsApi, tag);
     yield put({
       type: actions.LOAD_HASHTAG_POSTS_SUCCESS,
@@ -91,9 +91,33 @@ function* loadHashTagPosts({ payload }) {
       },
     });
   } catch (error) {
-    console.error('Get hashtagposts error. ', error);
+    console.error('Get hashtag posts error. ', error);
     yield put({
       type: actions.LOAD_HASHTAG_POSTS_FAILURE,
+      error,
+    });
+  }
+}
+
+function loadUserPostsApi(userId) {
+  return axios.get(`/user/${userId}/posts`);
+}
+
+function* loadUserPosts({ payload }) {
+  try {
+    const { userId } = payload;
+    console.log('Get loaduser posts. ', userId);
+    const { data } = yield call(loadUserPostsApi, userId);
+    yield put({
+      type: actions.LOAD_USER_POSTS_SUCCESS,
+      payload: {
+        data,
+      },
+    });
+  } catch (error) {
+    console.error('Get loaduser posts error. ', error);
+    yield put({
+      type: actions.LOAD_USER_POSTS_FAILURE,
       error,
     });
   }
@@ -102,6 +126,7 @@ function* loadHashTagPosts({ payload }) {
 function* watchLoadMainPosts() {
   yield takeLatest(actions.LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
   yield takeLatest(actions.LOAD_HASHTAG_POSTS_REQUEST, loadHashTagPosts);
+  yield takeLatest(actions.LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
 function* watchAddPost() {

@@ -28,7 +28,7 @@ Hashtag.propTypes = {
 };
 
 Hashtag.getInitialProps = async (context) => {
-  console.log('hashtag getInitialProps', context.query.tag);
+  console.log('Hashtag getInitialProps', context.query.tag);
   return { tag: context.query.tag };
 };
 

@@ -50,19 +50,21 @@ function* logout() {
   }
 }
 
-function loadUserApi() {
-  return axios.get('/user', {
+function loadUserApi(userId) {
+  return axios.get(userId ? `/user/${userId}` : '/user', {
     withCredentials: true,
   });
 }
 
-function* loadUser() {
+function* loadUser({ payload }) {
   try {
-    const { data } = yield call(loadUserApi);
+    const { userId } = payload;
+    const { data } = yield call(loadUserApi, userId);
     yield put({
       type: actions.LOAD_USER_SUCCESS,
       payload: {
         data,
+        me: !userId,
       },
     });
   } catch (error) {

@@ -34,6 +34,10 @@ router.get('/:tag', async (req, res, next) => { // GET /api/hashtag/:tag
             userId: '$userData.userId',
           },
         },
+      }, {
+        $sort: {
+          _id: -1,
+        },
       }]);
 
       return fullPost[0];

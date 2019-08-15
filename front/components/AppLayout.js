@@ -1,9 +1,9 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { Menu, Input, Row, Col } from 'antd';
+import { Menu, Input, Row, Col, Button } from 'antd';
 
 import LoginForm from './LoginForm';
 import UserProfile from './UserProfile';
@@ -13,10 +13,14 @@ import * as userActions from '../reducers/user';
 const AppLayout = ({ children }) => {
   const dispatch = useDispatch();
   // Get from store
-  const { me } = useSelector(state => state.user);
+  const { me, isLoggingOut } = useSelector(state => state.user);
 
   useEffect(() => {
     dispatch(userActions.loadUserReuqestAction());
+  }, []);
+
+  const onLogout = useCallback(() => {
+    dispatch(userActions.logoutRequestAction());
   }, []);
 
   return (
@@ -29,7 +33,14 @@ const AppLayout = ({ children }) => {
       <Row gutter={8}>
         <Col xs={24} md={6}>
           {
-            me ? <UserProfile /> : <LoginForm />
+            me
+              ? (
+                <div>
+                  <UserProfile userData={me} />
+                  <Button style={{ marginTop: '.5em', float: 'right' }} onClick={onLogout} loading={isLoggingOut}>LogOut</Button>
+                </div>
+              )
+              : <LoginForm />
           }
         </Col>
         <Col xs={24} md={12}>{children}</Col>

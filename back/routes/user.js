@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 
 const UserModel = require('../models/user');
+const PostModel = require('../models/post');
 
 const router = express.Router();
 
@@ -39,8 +40,34 @@ router.post('/', async (req, res, next) => { // POST /api/user 회원가입
   }
 });
 
-router.get('/:id', (req, res) => { // 남의 정보 가져오는 것 ex) GET /api/user/123
+router.get('/:id', async (req, res, next) => { // 남의 정보 가져오는 것 ex) GET /api/user/123
+  try {
+    const fullUser = await UserModel.aggregate([{
+      $match: {
+        userId: req.params.id,
+      },
+    }, {
+      $lookup: {
+        from: 'posts',
+        localField: 'userId', // Standard key from now db(User)
+        foreignField: 'userId', // Find key by from db(Posts)
+        as: 'user_posts',
+      },
+    }, {
+      $project: {
+        nickname: '$nickname',
+        userId: '$userId',
+        followings: '$followings',
+        followers: '$followers',
+        posts: '$user_posts._id',
+      },
+    }]).exec();
 
+    return res.json(fullUser[0]);
+  } catch (error) {
+    console.log('Get user by id error. ', error);
+    return next(error);
+  }
 });
 
 router.post('/logout', (req, res) => { // POST /api/user/logout
@@ -84,9 +111,6 @@ router.post('/login', (req, res, next) => { // POST /api/user/login
             posts: '$user_posts._id',
           },
         }]).exec();
-
-        console.log('Full user', fullUser[0]);
-
         return res.json(fullUser[0]);
       } catch (err) {
         return next(err);
@@ -110,8 +134,38 @@ router.delete('/:id/follower', (req, res) => {
 
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', async (req, res, next) => { // GET /api/user/:id/posts
+  try {
+    const posts = await PostModel.aggregate([{
+      $match: {
+        userId: req.params.id,
+      },
+    }, {
+      $lookup: {
+        from: 'users',
+        localField: 'userId', // Standard key from now db(Post)
+        foreignField: 'userId', // Find key by from db(Users)
+        as: 'userData',
+      },
+    }, {
+      $project: {
+        content: '$content',
+        user: {
+          nickname: '$userData.nickname',
+          userId: '$userData.userId',
+        },
+      },
+    }, {
+      $sort: {
+        _id: -1,
+      },
+    }]);
 
+    return res.json(posts);
+  } catch (error) {
+    console.log('Get user posts error. ', error);
+    return next(error);
+  }
 });
 
 module.exports = router;

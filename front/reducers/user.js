@@ -47,8 +47,11 @@ export const logoutRequestAction = () => ({
   type: LOG_OUT_REQUEST,
 });
 
-export const loadUserReuqestAction = () => ({
+export const loadUserReuqestAction = data => ({
   type: LOAD_USER_REQUEST,
+  payload: {
+    userId: data,
+  },
 });
 
 // reducers
@@ -118,9 +121,15 @@ export default (state = initialState, action) => {
         ...state,
       };
     case LOAD_USER_SUCCESS:
+      if (payload.me) {
+        return {
+          ...state,
+          me: payload.data,
+        };
+      }
       return {
         ...state,
-        me: payload.data,
+        userInfo: payload.data,
       };
     case LOAD_USER_FAILURE:
       return {
