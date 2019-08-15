@@ -25,7 +25,4 @@ const Home = () => {
   );
 };
 
-Home.getInitialProps = async (context) => {
-};
-
 export default Home;

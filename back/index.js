@@ -16,6 +16,7 @@ const passportConfig = require('./passport');
 const userAPIRouter = require('./routes/user');
 const postsApiRouter = require('./routes/posts');
 const postApiRouter = require('./routes/post');
+const hashtagApiRouter = require('./routes/hashtag');
 
 mongoose.connect(MONGODB_URL);
 dotenv.config();
@@ -47,6 +48,7 @@ app.use(passport.session());
 app.use('/api/user', userAPIRouter);
 app.use('/api/posts', postsApiRouter);
 app.use('/api/post', postApiRouter);
+app.use('/api/hashtag', hashtagApiRouter);
 
 app.listen(8080, () => {
   console.log('server is running on http://localhost:8080');

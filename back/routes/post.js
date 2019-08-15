@@ -18,7 +18,7 @@ router.post('/', async (req, res, next) => { // POST /api/post/
         await HashTagModel.findOneAndUpdate({
           content: hashTag,
         }, {
-          $push: {
+          $addToSet: {
             posts: newPost.id,
           },
         }, {

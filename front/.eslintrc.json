@@ -28,6 +28,7 @@
     "jsx-a11y/label-has-associated-control": "off",
     "no-console": "off",
     "no-case-declarations": "off",
-    "jsx-a11y/anchor-is-valid": "off"
+    "jsx-a11y/anchor-is-valid": "off",
+    "react/no-array-index-key": "off"
   }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Avatar, Icon, Button } from 'antd';
 
+import PostCardContent from './PostCardContent';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 
@@ -28,7 +29,7 @@ const PostCard = ({ post }) => {
         <Card.Meta
           avatar={<Avatar>{post.user.nickname[0][0]}</Avatar>}
           title={post.user.nickname[0]}
-          description={post.content}
+          description={<PostCardContent content={post.content} />}
         />
       </Card>
       {

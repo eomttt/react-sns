@@ -19,17 +19,12 @@ const AppLayout = ({ children }) => {
     dispatch(userActions.loadUserReuqestAction());
   }, []);
 
-  const yoyo = 'yoyo';
-  const wowo = 'wowo';
-
   return (
     <div>
       <Menu mode="horizontal">
         <Menu.Item key="home"><Link href="/"><a>NodeBird</a></Link></Menu.Item>
         <Menu.Item key="profile"><Link href="/profile"><a>Profile</a></Link></Menu.Item>
         <Menu.Item key="mail"><Input.Search enterButton style={{ verticalAlign: 'middle' }} /></Menu.Item>
-        <Menu.Item key="hash1"><Link href="/hashtag/[tag]" as={`/hashtag/${yoyo}`}><a>yoyo</a></Link></Menu.Item>
-        <Menu.Item key="hash2"><Link href="/hashtag/[tag]" as={`/hashtag/${wowo}`}><a>wowo</a></Link></Menu.Item>
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>

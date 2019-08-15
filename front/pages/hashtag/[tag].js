@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import * as actions from '../../reducers/post';
+
+import PostCard from '../../components/PostCard';
+
 const Hashtag = ({ tag }) => {
-  console.log(tag);
+  const dispatch = useDispatch();
+  const { mainPosts } = useSelector(state => state.post);
+
+  useEffect(() => {
+    dispatch(actions.loadHashTagPostsRequest(tag));
+  }, []);
+
   return (
     <div>
-      {tag}
+      {
+        mainPosts && mainPosts.map(v => <PostCard key={v._id} post={v} />)
+      }
     </div>
   );
 };

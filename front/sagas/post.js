@@ -75,8 +75,33 @@ function* loadMainPosts() {
   }
 }
 
+function loadHashTagPostsApi(tag) {
+  return axios.get(`/hashtag/${tag}`); // Get /api/hashtag/:tag
+}
+
+function* loadHashTagPosts({ payload }) {
+  try {
+    const { tag } = payload;
+    console.log('Get hashtagposts. ', tag);
+    const { data } = yield call(loadHashTagPostsApi, tag);
+    yield put({
+      type: actions.LOAD_HASHTAG_POSTS_SUCCESS,
+      payload: {
+        data,
+      },
+    });
+  } catch (error) {
+    console.error('Get hashtagposts error. ', error);
+    yield put({
+      type: actions.LOAD_HASHTAG_POSTS_FAILURE,
+      error,
+    });
+  }
+}
+
 function* watchLoadMainPosts() {
   yield takeLatest(actions.LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
+  yield takeLatest(actions.LOAD_HASHTAG_POSTS_REQUEST, loadHashTagPosts);
 }
 
 function* watchAddPost() {
