@@ -9,16 +9,6 @@ export const initialState = {
   commentAdded: false,
 };
 
-const dummyComment = {
-  id: 1,
-  User: {
-    id: 1,
-    nickname: 'MockUser',
-  },
-  createdAt: new Date(),
-  content: 'Dummy REPLY',
-};
-
 
 // Action types
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -28,6 +18,10 @@ export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
+export const LOAD_COMMENTS_REQUEST = 'LOAD_COMMENTS_REQUEST';
+export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
+export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
 export const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
 export const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
@@ -53,6 +47,13 @@ export const addCommentRequest = data => ({
   type: ADD_COMMENT_REQUEST,
   payload: {
     addCommentData: data,
+  },
+});
+
+export const loadCommentRequest = data => ({
+  type: LOAD_COMMENTS_REQUEST,
+  payload: {
+    postId: data,
   },
 });
 
@@ -105,13 +106,12 @@ export default (state = initialState, action) => {
         commentAdded: false,
         addCommentErrorReason: '',
       };
-    case ADD_COMMENT_SUCCESS:
-      const postIndex = state.mainPosts.findIndex(v => v.id === payload.postId);
+    case ADD_COMMENT_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v._id === payload.data.postId);
       const post = state.mainPosts[postIndex];
-      const Comments = [...post.Comments, dummyComment];
-
+      const comments = post.comments ? [payload.data, ...post.comments] : [payload.data];
       const mainPosts = [...state.mainPosts];
-      mainPosts[postIndex] = { ...post, Comments };
+      mainPosts[postIndex] = { ...post, comments };
 
       return {
         ...state,
@@ -119,11 +119,32 @@ export default (state = initialState, action) => {
         commentAdded: true,
         mainPosts,
       };
+    }
+
     case ADD_COMMENT_FAILURE:
       return {
         ...state,
         isAddingComment: false,
         addCommentErrorReason: error,
+      };
+    case LOAD_COMMENTS_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_COMMENTS_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v._id === payload.postId);
+      const post = state.mainPosts[postIndex];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, comments: payload.data };
+
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
+    case LOAD_COMMENTS_FAILURE:
+      return {
+        ...state,
       };
     case LOAD_MAIN_POSTS_REQUEST:
       return {

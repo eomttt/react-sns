@@ -24,7 +24,10 @@ const CommentForm = ({ postId }) => {
       return alert('Please login');
     }
 
+    console.log(me.userId, postId, text);
+
     return dispatch(actions.addCommentRequest({
+      userId: me.userId,
       postId,
       text,
     }));
@@ -45,7 +48,7 @@ const CommentForm = ({ postId }) => {
 };
 
 CommentForm.propTypes = {
-  postId: PropTypes.number.isRequired,
+  postId: PropTypes.string.isRequired,
 };
 
 export default CommentForm;

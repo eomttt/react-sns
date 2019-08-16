@@ -29,26 +29,53 @@ function* addPost({ payload }) {
   }
 }
 
-function addCommentApi() {
-  return axios.post('/addcomment');
+function addCommentApi({ userId, postId, text }) {
+  return axios.post(`/post/${postId}/comment`, { content: text, userId }, {
+    withCredentials: true,
+  });
 }
 
 function* addComment({ payload }) {
   try {
     const { addCommentData } = payload;
     console.log('Add comment data.', addCommentData);
-    // yield call(addCommentApi);
-    yield delay(2000);
+    const { data } = yield call(addCommentApi, addCommentData);
     yield put({
       type: actions.ADD_COMMENT_SUCCESS,
       payload: {
-        postId: addCommentData.postId,
+        data,
       },
     });
   } catch (error) {
     console.error('Add comment error. ', error);
     yield put({
       type: actions.ADD_COMMENT_FAILURE,
+      error,
+    });
+  }
+}
+
+function loadCommentsApi(postId) {
+  console.log(postId);
+  return axios.get(`/post/${postId}/comments`);
+}
+
+function* loadComments({ payload }) {
+  try {
+    const { postId } = payload;
+    console.log('Load comments data.', postId);
+    const { data } = yield call(loadCommentsApi, postId);
+    yield put({
+      type: actions.LOAD_COMMENTS_SUCCESS,
+      payload: {
+        data,
+        postId,
+      },
+    });
+  } catch (error) {
+    console.error('Load comments error. ', error);
+    yield put({
+      type: actions.LOAD_COMMENTS_FAILURE,
       error,
     });
   }
@@ -135,6 +162,7 @@ function* watchAddPost() {
 
 function* watchAddComment() {
   yield takeLatest(actions.ADD_COMMENT_REQUEST, addComment);
+  yield takeLatest(actions.LOAD_COMMENTS_REQUEST, loadComments);
 }
 
 export default function* postSaga() {

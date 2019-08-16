@@ -2,6 +2,7 @@ const express = require('express');
 
 const PostModel = require('../models/post');
 const HashTagModel = require('../models/hashTag');
+const CommentModel = require('../models/comment');
 
 const router = express.Router();
 
@@ -55,6 +56,83 @@ router.post('/', async (req, res, next) => { // POST /api/post/
   } catch (error) {
     console.error('Add post error. ', error);
     next(error);
+  }
+});
+
+router.post('/:id/comment', async (req, res, next) => { // POST /api/post/:id/comment
+  try {
+    const { userId, content } = req.body;
+    const { id } = req.params;
+
+    await CommentModel.create({
+      userId,
+      postId: id,
+      content,
+    });
+
+    const comments = await CommentModel.aggregate([{
+      $match: {
+        postId: id,
+      },
+    }, {
+      $lookup: {
+        from: 'users',
+        localField: 'userId', // Standard key from now db(Comments)
+        foreignField: 'userId', // Find key by from db(Users)
+        as: 'userData',
+      },
+    }, {
+      $project: {
+        content: '$content',
+        postId: '$postId',
+        user: {
+          nickname: '$userData.nickname',
+          userId: '$userData.userId',
+        },
+      },
+    }]);
+
+    console.log(comments[comments.length - 1]);
+    return res.json(comments[comments.length - 1]);
+  } catch (error) {
+    console.error('Add post comment error. ', error);
+    return next(error);
+  }
+});
+
+router.get('/:id/comments', async (req, res, next) => { // GET /api/post/:id/comments
+  try {
+    const { id } = req.params;
+
+    const comments = await CommentModel.aggregate([{
+      $match: {
+        postId: id,
+      },
+    }, {
+      $lookup: {
+        from: 'users',
+        localField: 'userId', // Standard key from now db(Comments)
+        foreignField: 'userId', // Find key by from db(Users)
+        as: 'userData',
+      },
+    }, {
+      $project: {
+        content: '$content',
+        postId: '$postId',
+        user: {
+          nickname: '$userData.nickname',
+          userId: '$userData.userId',
+        },
+      },
+    }, {
+      $sort: {
+        _id: -1,
+      },
+    }]);
+    return res.json(comments);
+  } catch (error) {
+    console.error('Get post comments error. ', error);
+    return next(error);
   }
 });
 

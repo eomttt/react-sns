@@ -11,7 +11,7 @@ const model = {
     type: String,
   },
   content: {
-    type: Array,
+    type: String,
   },
 };
 const commentSchema = new Schema(model);

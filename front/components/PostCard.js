@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
-import Link from 'next/link'
+import { useDispatch } from 'react-redux';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Card, Avatar, Icon, Button } from 'antd';
 
-import PostCardContent from './PostCardContent';
+import * as actions from '../reducers/post';
+
+import PostCardContent from './Content';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 
 const PostCard = ({ post }) => {
+  const dispatch = useDispatch();
   const [commentOpened, setCommentOpened] = useState(false);
 
   const onToggleComment = () => {
+    if (!commentOpened) {
+      dispatch(actions.loadCommentRequest(post._id));
+    }
     setCommentOpened(prev => !prev);
   };
 
@@ -36,8 +43,8 @@ const PostCard = ({ post }) => {
       {
         commentOpened && (
           <>
-            <CommentForm postId={post.id} />
-            <CommentList commentList={post.Comments} />
+            <CommentForm postId={post._id} />
+            <CommentList commentList={post.comments || []} />
           </>
         )
       }
@@ -51,8 +58,8 @@ PostCard.propTypes = {
     content: PropTypes.string,
     img: PropTypes.string,
     createdAt: PropTypes.object,
-    id: PropTypes.number,
-    Comments: PropTypes.array,
+    _id: PropTypes.string,
+    comments: PropTypes.array,
   }).isRequired,
 };
 
