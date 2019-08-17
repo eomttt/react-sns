@@ -7,6 +7,7 @@ import { Card, Avatar, Icon, Button } from 'antd';
 import * as actions from '../reducers/post';
 
 import PostCardContent from './Content';
+import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 
@@ -40,6 +41,7 @@ const PostCard = ({ post }) => {
           description={<PostCardContent content={post.content} />}
         />
       </Card>
+      <PostImages images={post.images} />
       {
         commentOpened && (
           <>
@@ -60,6 +62,7 @@ PostCard.propTypes = {
     createdAt: PropTypes.object,
     _id: PropTypes.string,
     comments: PropTypes.array,
+    images: PropTypes.array,
   }).isRequired,
 };
 

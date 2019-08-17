@@ -150,6 +150,30 @@ function* loadUserPosts({ payload }) {
   }
 }
 
+function uploadImageApi(imageData) {
+  return axios.post('/post/images', imageData);
+}
+
+function* uploadImage({ payload }) {
+  try {
+    const { imageData } = payload;
+    const { data } = yield call(uploadImageApi, imageData);
+    console.log(data);
+    yield put({
+      type: actions.UPLOAD_IMAGES_SUCCESS,
+      payload: {
+        data,
+      },
+    });
+  } catch (error) {
+    console.error('Upload image error. ', error);
+    yield put({
+      type: actions.UPLOAD_IMAGES_FAILURE,
+      error,
+    });
+  }
+}
+
 function* watchLoadMainPosts() {
   yield takeLatest(actions.LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
   yield takeLatest(actions.LOAD_HASHTAG_POSTS_REQUEST, loadHashTagPosts);
@@ -160,6 +184,10 @@ function* watchAddPost() {
   yield takeLatest(actions.ADD_POST_REQUEST, addPost);
 }
 
+function* watchUploadImages() {
+  yield takeLatest(actions.UPLOAD_IMAGES_REQUEST, uploadImage);
+}
+
 function* watchAddComment() {
   yield takeLatest(actions.ADD_COMMENT_REQUEST, addComment);
   yield takeLatest(actions.LOAD_COMMENTS_REQUEST, loadComments);
@@ -168,6 +196,7 @@ function* watchAddComment() {
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
+    fork(watchUploadImages),
     fork(watchLoadMainPosts),
     fork(watchAddComment),
   ]);

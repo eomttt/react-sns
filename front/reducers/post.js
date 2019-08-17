@@ -35,6 +35,10 @@ export const LOAD_USER_POSTS_REQUEST = 'LOAD_USER_POSTS_REQUEST';
 export const LOAD_USER_POSTS_SUCCESS = 'LOAD_USER_POSTS_SUCCESS';
 export const LOAD_USER_POSTS_FAILURE = 'LOAD_USER_POSTS_FAILURE';
 
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
 // Action creators
 export const addPostRequest = data => ({
   type: ADD_POST_REQUEST,
@@ -75,6 +79,13 @@ export const loadUserPostsRequest = data => ({
   },
 });
 
+export const uploadImagesRequest = data => ({
+  type: UPLOAD_IMAGES_REQUEST,
+  payload: {
+    imageData: data,
+  },
+});
+
 // reducers
 export default (state = initialState, action) => {
   const { type, payload, error } = action;
@@ -91,6 +102,7 @@ export default (state = initialState, action) => {
         ...state,
         isAddingPost: false,
         postAdded: true,
+        imagePaths: [],
         mainPosts: [payload.data, ...state.mainPosts],
       };
     case ADD_POST_FAILURE:
@@ -182,6 +194,19 @@ export default (state = initialState, action) => {
         mainPosts: payload.data,
       };
     case LOAD_USER_POSTS_FAILURE:
+      return {
+        ...state,
+      };
+    case UPLOAD_IMAGES_REQUEST:
+      return {
+        ...state,
+      };
+    case UPLOAD_IMAGES_SUCCESS:
+      return {
+        ...state,
+        imagePaths: [...state.imagePaths, ...payload.data],
+      };
+    case UPLOAD_IMAGES_FAILURE:
       return {
         ...state,
       };

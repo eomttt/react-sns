@@ -25,6 +25,7 @@ const app = express();
 passportConfig();
 
 app.use(morgan('dev'));
+app.use('/', express.static('uploads'));
 app.use(cors({
   origin: true, // Allow all request
   credentials: true, // For transition cookie (cors, axios)

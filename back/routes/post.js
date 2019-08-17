@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 
 const PostModel = require('../models/post');
 const HashTagModel = require('../models/hashTag');
@@ -6,12 +8,28 @@ const CommentModel = require('../models/comment');
 
 const router = express.Router();
 
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // example.png, ext === .png, basename === example
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      done(null, basename + new Date().valueOf() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
 router.post('/', async (req, res, next) => { // POST /api/post/
   try {
     const hashTags = req.body.text.match(/#[^\s]+/g);
     const newPost = await PostModel.create({
       content: req.body.text,
       userId: req.user.userId,
+      images: req.body.images,
     });
 
     if (hashTags) {
@@ -43,6 +61,7 @@ router.post('/', async (req, res, next) => { // POST /api/post/
     }, {
       $project: {
         content: '$content',
+        images: '$images',
         user: {
           nickname: '$userData.nickname',
           userId: '$userData.userId',
@@ -132,6 +151,16 @@ router.get('/:id/comments', async (req, res, next) => { // GET /api/post/:id/com
     return res.json(comments);
   } catch (error) {
     console.error('Get post comments error. ', error);
+    return next(error);
+  }
+});
+
+router.post('/images', upload.array('image'), (req, res, next) => { // GET /api/post/images
+  try {
+    console.log(req.files);
+    return res.json(req.files.map((v) => v.filename));
+  } catch (error) {
+    console.error('Upload images. ', error);
     return next(error);
   }
 });

@@ -18,6 +18,7 @@ router.get('/', async (req, res, next) => { // GET /api/posts/
     }, {
       $project: {
         content: '$content',
+        images: '$images',
         user: {
           nickname: '$userData.nickname',
           userId: '$userData.userId',

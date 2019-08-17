@@ -10,6 +10,10 @@ const model = {
   content: {
     type: String,
   },
+  images: {
+    type: Array,
+    default: [],
+  },
 };
 const postsSchema = new Schema(model);
 
