@@ -39,6 +39,14 @@ export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
 export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
 export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
 // Action creators
 export const addPostRequest = data => ({
   type: ADD_POST_REQUEST,
@@ -83,6 +91,20 @@ export const uploadImagesRequest = data => ({
   type: UPLOAD_IMAGES_REQUEST,
   payload: {
     imageData: data,
+  },
+});
+
+export const likePostRequest = postId => ({
+  type: LIKE_POST_REQUEST,
+  payload: {
+    postId,
+  },
+});
+
+export const unLikePostRequest = postId => ({
+  type: UNLIKE_POST_REQUEST,
+  payload: {
+    postId,
   },
 });
 
@@ -210,6 +232,26 @@ export default (state = initialState, action) => {
       return {
         ...state,
       };
+    case LIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v._id === payload.data._id);
+      const post = state.mainPosts[postIndex];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, likers: payload.data.likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
+    case UNLIKE_POST_SUCCESS: {
+      const postIndex = state.mainPosts.findIndex(v => v._id === payload.data._id);
+      const post = state.mainPosts[postIndex];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, likers: payload.data.likers };
+      return {
+        ...state,
+        mainPosts,
+      };
+    }
     default:
       return state;
   }

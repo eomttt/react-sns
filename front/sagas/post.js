@@ -174,6 +174,62 @@ function* uploadImage({ payload }) {
   }
 }
 
+function likePostApi(postId) {
+  return axios.post(`/post/${postId}/like`, {}, {
+    withCredentials: true,
+  });
+}
+
+function* likePost({ payload }) {
+  try {
+    const { postId } = payload;
+    const { data } = yield call(likePostApi, postId);
+    yield put({
+      type: actions.LIKE_POST_SUCCESS,
+      payload: {
+        data,
+      },
+    });
+  } catch (error) {
+    console.error('Like post error. ', error);
+    yield put({
+      type: actions.LIKE_POST_FAILURE,
+      error,
+    });
+  }
+}
+
+function unlikePostAPI(postId) {
+  return axios.delete(`/post/${postId}/unlike`, {
+    withCredentials: true,
+  });
+}
+
+function* unLikePost({ payload }) {
+  try {
+    const { postId } = payload;
+    const { data } = yield call(unlikePostAPI, postId);
+    console.log(data);
+    yield put({
+      type: actions.UNLIKE_POST_SUCCESS,
+      payload: {
+        data,
+      },
+    });
+  } catch (error) {
+    console.error('Unlike post error. ', error);
+    yield put({
+      type: actions.UNLIKE_POST_FAILURE,
+      error,
+    });
+  }
+}
+
+function* watchLikePost() {
+  yield takeLatest(actions.LIKE_POST_REQUEST, likePost);
+  yield takeLatest(actions.UNLIKE_POST_REQUEST, unLikePost);
+}
+
 function* watchLoadMainPosts() {
   yield takeLatest(actions.LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
   yield takeLatest(actions.LOAD_HASHTAG_POSTS_REQUEST, loadHashTagPosts);
@@ -199,5 +255,6 @@ export default function* postSaga() {
     fork(watchUploadImages),
     fork(watchLoadMainPosts),
     fork(watchAddComment),
+    fork(watchLikePost),
   ]);
 }

@@ -14,6 +14,10 @@ const model = {
     type: Array,
     default: [],
   },
+  likers: {
+    type: Array,
+    default: [],
+  },
 };
 const postsSchema = new Schema(model);
 

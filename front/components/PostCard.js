@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Card, Avatar, Icon, Button } from 'antd';
@@ -13,13 +13,28 @@ import CommentList from './CommentList';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
+  const { me } = useSelector(state => state.user);
   const [commentOpened, setCommentOpened] = useState(false);
+
+  const liked = me && post.likers && post.likers.find(liker => liker === me.userId);
 
   const onToggleComment = () => {
     if (!commentOpened) {
       dispatch(actions.loadCommentRequest(post._id));
     }
     setCommentOpened(prev => !prev);
+  };
+
+  const onToggleLike = () => {
+    if (!me) {
+      return alert('Please login');
+    }
+
+    if (liked) {
+      return dispatch(actions.unLikePostRequest(post._id));
+    }
+
+    return dispatch(actions.likePostRequest(post._id));
   };
 
   return (
@@ -29,7 +44,7 @@ const PostCard = ({ post }) => {
         cover={post.img && <img alt="example" src={post.img} />}
         actions={[
           <Icon type="retweet" key="retweet" />,
-          <Icon type="heart" key="heart" />,
+          <Icon type="heart" key="heart" theme={liked ? 'twoTone' : 'outlined'} twoToneColor="#eb2f96" onClick={onToggleLike} />,
           <Icon type="message" key="message" onClick={onToggleComment} />,
           <Icon type="ellipsis" key="ellipsis" />,
         ]}
@@ -63,6 +78,7 @@ PostCard.propTypes = {
     _id: PropTypes.string,
     comments: PropTypes.array,
     images: PropTypes.array,
+    likers: PropTypes.array,
   }).isRequired,
 };
 

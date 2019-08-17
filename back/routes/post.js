@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const multer = require('multer');
 const path = require('path');
 
@@ -7,6 +8,7 @@ const HashTagModel = require('../models/hashTag');
 const CommentModel = require('../models/comment');
 
 const router = express.Router();
+const { ObjectId } = mongoose.Types;
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -62,6 +64,7 @@ router.post('/', async (req, res, next) => { // POST /api/post/
       $project: {
         content: '$content',
         images: '$images',
+        likers: '$likers',
         user: {
           nickname: '$userData.nickname',
           userId: '$userData.userId',
@@ -155,12 +158,56 @@ router.get('/:id/comments', async (req, res, next) => { // GET /api/post/:id/com
   }
 });
 
-router.post('/images', upload.array('image'), (req, res, next) => { // GET /api/post/images
+router.post('/images', upload.array('image'), (req, res, next) => { // POST /api/post/images
   try {
     console.log(req.files);
     return res.json(req.files.map((v) => v.filename));
   } catch (error) {
     console.error('Upload images. ', error);
+    return next(error);
+  }
+});
+
+router.post('/:id/like', async (req, res, next) => { // POST /api/post/:id/like
+  try {
+    const postId = req.params.id;
+
+    const post = await PostModel.findOneAndUpdate({
+      _id: postId,
+    }, {
+      $addToSet: {
+        likers: req.user.userId,
+      },
+    }, {
+      new: true,
+      upsert: true,
+      multie: true,
+    });
+    return res.json(post.toJSON());
+  } catch (error) {
+    console.error('Like post error. ', error);
+    return next(error);
+  }
+});
+
+router.delete('/:id/unlike', async (req, res, next) => { // POST /api/post/:id/unlike
+  try {
+    const postId = req.params.id;
+
+    const post = await PostModel.findOneAndUpdate({
+      _id: postId,
+    }, {
+      $pull: {
+        likers: req.user.userId,
+      },
+    }, {
+      new: true,
+      upsert: true,
+      multie: true,
+    });
+    return res.json(post.toJSON());
+  } catch (error) {
+    console.error('Unlike post error. ', error);
     return next(error);
   }
 });
